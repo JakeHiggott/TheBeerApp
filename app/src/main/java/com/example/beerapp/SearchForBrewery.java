@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.view.View;
 import android.widget.Button;
 
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -35,7 +37,8 @@ import java.util.ArrayList;
 
 
 public class SearchForBrewery extends AppCompatActivity {
-    JSONArray apiReturn;
+    String apiName = "";
+    ArrayList<String> NamesArray = new ArrayList<>();
     @Override
 
 
@@ -45,11 +48,16 @@ public class SearchForBrewery extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_for_brewery);
 
+        brewSearchButton();
         findBrewBackButton();
-        //new fetchData().start();
-        apiTest();
 
-        
+
+
+
+
+
+
+
 
 
     }
@@ -57,27 +65,53 @@ public class SearchForBrewery extends AppCompatActivity {
         Button displayButton = findViewById(R.id.findBrewBackButton);
         displayButton.setOnClickListener(view -> finish());
     }
+    private void brewSearchButton() {
+        Button displayButton = findViewById(R.id.brewSearchButton);
+        displayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                apiName = "";
+                apiCallZipCode("40206");
+
+                int i = 0;
+                while(i == 0){
+                    if(NamesArray.size() == 0){
+
+
+                    }else{
+                        TextView apiTestTextView = findViewById(R.id.apitTestTextView);
+                        apiTestTextView.setText(NamesArray.get(1));
+                        i = 1;
+                    }
+
+                }
+
+
+
+            }
+    });}
+
 
     //API STUFF
 
 
 
 
-    public void apiTest(){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+    public void apiCallZipCode(String zipcode){
+        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        //StrictMode.setThreadPolicy(policy);
         OkHttpClient client = new OkHttpClient();
 
-        String url = "https://api.openbrewerydb.org/breweries?by_city=san%20diego&per_page=2";
-
+        String url = "https://api.openbrewerydb.org/breweries?by_postal=";
         Request request = new Request.Builder()
-                .url(url)
+                .url(url+zipcode)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
+
 
             }
 
@@ -91,10 +125,14 @@ public class SearchForBrewery extends AppCompatActivity {
                     try {
                         Log.d("apitest",myResponse);
                         JSONArray jsonarray = new JSONArray(myResponse);
-                        JSONObject names = jsonarray.getJSONObject(0);
-                        apiReturn = jsonarray;
-                        String name = names.getString("brewery_type");
-                        Log.d("apitest",name);
+                        int i=0;
+                        String name = "";
+                        while (i < jsonarray.length()) {
+                            NamesArray.add(jsonarray.getJSONObject(i).getString("name")) ;
+                            i = i + 1;
+                        }
+
+                        Log.d("Amount of results from api call: ", String.valueOf(jsonarray.length()));
 
 
 
@@ -106,14 +144,14 @@ public class SearchForBrewery extends AppCompatActivity {
 
 
 
-                    SearchForBrewery.this.runOnUiThread(new Runnable() {
+                    /*SearchForBrewery.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
-                            TextView apiTestTextView = findViewById(R.id.apitTestTextView);
+                           TextView apiTestTextView = findViewById(R.id.apitTestTextView);
                             apiTestTextView.setText(myResponse);
                         }
-                    });
+                    });*/
 
 
                 }
