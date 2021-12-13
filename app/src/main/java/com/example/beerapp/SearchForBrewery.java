@@ -32,7 +32,18 @@ import java.util.ArrayList;
 public class SearchForBrewery extends AppCompatActivity {
     String apiName = "";
     Boolean fakeSemaphore = false;
+
     ArrayList<String> NamesArray = new ArrayList<>();
+    ArrayList<String> BreweryTypeArray = new ArrayList<>();
+    ArrayList<String> BreweryAddressArray = new ArrayList<>();
+    ArrayList<String> BreweryCityArray = new ArrayList<>();
+    ArrayList<String> BreweryStateArray = new ArrayList<>();
+    ArrayList<String> BreweryPhoneArray = new ArrayList<>();
+    ArrayList<String> BreweryWebsiteArray = new ArrayList<>();
+    ArrayList<String> BreweryLongArray = new ArrayList<>();
+    ArrayList<String> BreweryLatArray = new ArrayList<>();
+
+
     @Override
 
 
@@ -70,18 +81,41 @@ public class SearchForBrewery extends AppCompatActivity {
                 EditText zipCodeRaw = findViewById(R.id.EnterZipCodeText);
                 String zipCodeString = zipCodeRaw.getText().toString();
 
-                //TextView tipAmountDisplay = findViewById(R.id.tipAmountText);
+
 
                 apiCallZipCode(zipCodeString);
                 while(fakeSemaphore == false){
+                    //Log.d("NAMES ARRAY ", String.valueOf(NamesArray.size()));
+
+                }
+                if(NamesArray.size() == 0){
+                    Log.d("ERROR ", "No values returned from api");
+
+                }else{
+
+                    //opens the recycle vc and passes in the array's it needs
+                    Log.d("NAMES ARRAY 2", String.valueOf(NamesArray.size()));
+                    Intent intent = new Intent(SearchForBrewery.this, SearchResults.class);
+                    intent.putExtra("NamesArray",NamesArray);
+                    intent.putExtra("BreweryTypeArray",BreweryTypeArray);
+                    intent.putExtra("BreweryAddressArray",BreweryAddressArray);
+                    intent.putExtra("BreweryCityArray",BreweryCityArray);
+                    intent.putExtra("BreweryStateArray",BreweryStateArray);
+                    intent.putExtra("BreweryWebsiteArray",BreweryWebsiteArray);
+                    intent.putExtra("BreweryPhoneArray",BreweryPhoneArray);
+                    intent.putExtra("BreweryLongArray",BreweryLongArray);
+                    intent.putExtra("BreweryLatArray",BreweryLatArray);
+
+                    startActivity(intent);
 
                 }
 
-                int i = 0;
+
+               /* int i = 0;
                 while(i == 0){
-                    if(NamesArray.size() == 0){
-                        TextView apiTestTextView = findViewById(R.id.apitTestTextView);
-                        apiTestTextView.setText("No Results found");
+                    if(NamesArray.size() == 0 ){
+                        //TextView apiTestTextView = findViewById(R.id.apitTestTextView);
+                        //apiTestTextView.setText("No Results found");
 
 
                     }else{
@@ -91,16 +125,17 @@ public class SearchForBrewery extends AppCompatActivity {
                             allTheNames = allTheNames +" "+ NamesArray.get(j)+",";
                             j = j + 1;
                         }
-                        TextView apiTestTextView = findViewById(R.id.apitTestTextView);
-                        apiTestTextView.setText("");
-                        apiTestTextView.setText(allTheNames);
+                        //TextView apiTestTextView = findViewById(R.id.apitTestTextView);
+                        //apiTestTextView.setText("");
+                        //apiTestTextView.setText(allTheNames);
                         i = 1;
                     }
 
-                }
-                Intent intent = new Intent(SearchForBrewery.this, SearchResults.class);
-                intent.putExtra("NamesArray",NamesArray);
-                startActivity(intent);
+
+                }*/
+
+
+
 
 
 
@@ -109,18 +144,24 @@ public class SearchForBrewery extends AppCompatActivity {
 
 
 
-    //public static SearchForBrewery getZipCodes(){
-        //return NamesArray;
-    //}
-    //API STUFF
+
 
 
 
 
     public void apiCallZipCode(String zipcode){
+
+        fakeSemaphore = false;
         NamesArray.clear();
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
+        BreweryTypeArray.clear();
+        BreweryAddressArray.clear();
+        BreweryCityArray.clear();
+        BreweryStateArray.clear();
+        BreweryLatArray.clear();
+        BreweryLongArray.clear();
+        BreweryPhoneArray.clear();
+        BreweryWebsiteArray.clear();
+
         OkHttpClient client = new OkHttpClient();
 
         String url = "https://api.openbrewerydb.org/breweries?by_postal=";
@@ -148,9 +189,24 @@ public class SearchForBrewery extends AppCompatActivity {
                         JSONArray jsonarray = new JSONArray(myResponse);
                         int i=0;
                         String name = "";
-                        while (i < jsonarray.length()) {
-                            NamesArray.add(jsonarray.getJSONObject(i).getString("name")) ;
-                            i = i + 1;
+                        if(jsonarray.length()==0){
+                            fakeSemaphore = true;
+
+                        }else {
+
+                            while (i < jsonarray.length()) {
+                                NamesArray.add(jsonarray.getJSONObject(i).getString("name"));
+                                BreweryTypeArray.add(jsonarray.getJSONObject(i).getString("brewery_type"));
+                                BreweryAddressArray.add(jsonarray.getJSONObject(i).getString("street"));
+                                BreweryCityArray.add(jsonarray.getJSONObject(i).getString("city"));
+                                BreweryStateArray.add(jsonarray.getJSONObject(i).getString("state"));
+                                BreweryPhoneArray.add(jsonarray.getJSONObject(i).getString("phone"));
+                                BreweryWebsiteArray.add(jsonarray.getJSONObject(i).getString("website_url"));
+                                BreweryLongArray.add(jsonarray.getJSONObject(i).getString("longitude"));
+                                BreweryLatArray.add(jsonarray.getJSONObject(i).getString("latitude"));
+                                i = i + 1;
+                            }
+                            fakeSemaphore=true;
                         }
 
                         Log.d("Amount of results from api call: ", String.valueOf(jsonarray.length()));
@@ -163,22 +219,11 @@ public class SearchForBrewery extends AppCompatActivity {
                     }
 
 
-
-
-                    /*SearchForBrewery.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                           TextView apiTestTextView = findViewById(R.id.apitTestTextView);
-                            apiTestTextView.setText(myResponse);
-                        }
-                    });*/
-
-
                 }
             }
         });
-    fakeSemaphore = true;
+        //fakeSemaphore = true;
+
     }
 
 

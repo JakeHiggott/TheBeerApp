@@ -16,7 +16,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class SearchResults extends AppCompatActivity {
+
     ArrayList<String> NamesArray = new ArrayList<>();
+    ArrayList<String> BreweryTypeArray = new ArrayList<>();
+    ArrayList<String> BreweryAddressArray = new ArrayList<>();
+    ArrayList<String> BreweryCityArray = new ArrayList<>();
+    ArrayList<String> BreweryStateArray = new ArrayList<>();
+    ArrayList<String> BreweryPhoneArray = new ArrayList<>();
+    ArrayList<String> BreweryWebsiteArray = new ArrayList<>();
+    ArrayList<String> BreweryLongArray = new ArrayList<>();
+    ArrayList<String> BreweryLatArray = new ArrayList<>();
+
     private RecyclerView recyclerView;
     private Adapter_For_Recycler.RecyclerViewClickListener listener;
 
@@ -24,22 +34,26 @@ public class SearchResults extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-        NamesArray.clear();
+
+        //NamesArray.clear();
+        //BreweryAddressArray.clear();
+        //BreweryTypeArray.clear();
+
         NamesArray = getIntent().getStringArrayListExtra("NamesArray");
+        BreweryTypeArray = getIntent().getStringArrayListExtra("BreweryTypeArray");
+        BreweryAddressArray = getIntent().getStringArrayListExtra("BreweryAddressArray");
+        BreweryCityArray = getIntent().getStringArrayListExtra("BreweryCityArray");
+        BreweryStateArray = getIntent().getStringArrayListExtra("BreweryStateArray");
+        BreweryWebsiteArray = getIntent().getStringArrayListExtra("BreweryWebsiteArray");
+        BreweryPhoneArray = getIntent().getStringArrayListExtra("BreweryPhoneArray");
+        BreweryLongArray = getIntent().getStringArrayListExtra("BreweryLongArray");
+        BreweryLatArray = getIntent().getStringArrayListExtra("BreweryLatArray");
+
         recyclerView = findViewById(R.id.BrewRecycler);
         Log.d("LIST VIEW ARRAY SIZE", String.valueOf(NamesArray.size()));
         setAdapter();
 
-        /*String allTheNames = "";
-        int j = 0;
-        while(j < NamesArray.size()){
-            allTheNames = allTheNames +" "+ NamesArray.get(j)+",";
-            j = j + 1;
 
-            }
-        TextView apiTestTextView = findViewById(R.id.namesTestTextView);
-        apiTestTextView.setText("");
-        apiTestTextView.setText(allTheNames);*/
 
 
 
@@ -67,6 +81,14 @@ public class SearchResults extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Select_Single_Brewery.class);
                 intent.putExtra("position", position);
                 intent.putExtra("NamesArray", NamesArray);
+                intent.putExtra("BreweryTypeArray",BreweryTypeArray);
+                intent.putExtra("BreweryAddressArray",BreweryAddressArray);
+                intent.putExtra("BreweryCityArray",BreweryCityArray);
+                intent.putExtra("BreweryStateArray",BreweryStateArray);
+                intent.putExtra("BreweryWebsiteArray",BreweryWebsiteArray);
+                intent.putExtra("BreweryPhoneArray",BreweryPhoneArray);
+                intent.putExtra("BreweryLongArray",BreweryLongArray);
+                intent.putExtra("BreweryLatArray",BreweryLatArray);
                 startActivity(intent);
             }
         };
