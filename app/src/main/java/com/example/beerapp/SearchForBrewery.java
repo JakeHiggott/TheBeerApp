@@ -1,19 +1,14 @@
 package com.example.beerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigator;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.util.Objects;
 
 //Source 1: This youtube video shows how to use okhttp and it is a library I am using to handle the API
 //https://www.youtube.com/watch?v=oGWJ8xD2W6k
@@ -22,7 +17,6 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 import android.util.Log;
 import android.widget.EditText;
@@ -30,14 +24,14 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import java.net.URL;
-import java.io.InputStream;
+
 import java.util.ArrayList;
+
 
 
 public class SearchForBrewery extends AppCompatActivity {
     String apiName = "";
+    Boolean fakeSemaphore = false;
     ArrayList<String> NamesArray = new ArrayList<>();
     @Override
 
@@ -66,25 +60,47 @@ public class SearchForBrewery extends AppCompatActivity {
         displayButton.setOnClickListener(view -> finish());
     }
     private void brewSearchButton() {
+        fakeSemaphore = false;
         Button displayButton = findViewById(R.id.brewSearchButton);
         displayButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 apiName = "";
-                apiCallZipCode("40206");
+                EditText zipCodeRaw = findViewById(R.id.EnterZipCodeText);
+                String zipCodeString = zipCodeRaw.getText().toString();
+
+                //TextView tipAmountDisplay = findViewById(R.id.tipAmountText);
+
+                apiCallZipCode(zipCodeString);
+                while(fakeSemaphore == false){
+
+                }
 
                 int i = 0;
                 while(i == 0){
                     if(NamesArray.size() == 0){
+                        TextView apiTestTextView = findViewById(R.id.apitTestTextView);
+                        apiTestTextView.setText("No Results found");
 
 
                     }else{
+                        String allTheNames = "";
+                        int j = 0;
+                        while(j < NamesArray.size()){
+                            allTheNames = allTheNames +" "+ NamesArray.get(j)+",";
+                            j = j + 1;
+                        }
                         TextView apiTestTextView = findViewById(R.id.apitTestTextView);
-                        apiTestTextView.setText(NamesArray.get(1));
+                        apiTestTextView.setText("");
+                        apiTestTextView.setText(allTheNames);
                         i = 1;
                     }
 
                 }
+                Intent intent = new Intent(SearchForBrewery.this, SearchResults.class);
+                intent.putExtra("NamesArray",NamesArray);
+                startActivity(intent);
 
 
 
@@ -92,12 +108,17 @@ public class SearchForBrewery extends AppCompatActivity {
     });}
 
 
+
+    //public static SearchForBrewery getZipCodes(){
+        //return NamesArray;
+    //}
     //API STUFF
 
 
 
 
     public void apiCallZipCode(String zipcode){
+        NamesArray.clear();
         //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         //StrictMode.setThreadPolicy(policy);
         OkHttpClient client = new OkHttpClient();
@@ -157,7 +178,7 @@ public class SearchForBrewery extends AppCompatActivity {
                 }
             }
         });
-
+    fakeSemaphore = true;
     }
 
 

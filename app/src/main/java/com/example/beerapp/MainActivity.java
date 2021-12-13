@@ -17,5 +17,6 @@ public class MainActivity extends AppCompatActivity {
     private void findBrew(){
         Button displayButton = findViewById(R.id.SearchForBrewButton);
         displayButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, SearchForBrewery.class)));
+
     }
 }
