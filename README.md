@@ -12,6 +12,6 @@ Current functionality:
 
 Backlog: 
 
-- Encapsulate data into an object and just pass arrays of objects instead of like a million individual arrays between views.
+- Encapsulate data into an object and just pass arrays of objects instead of like a million individual arrays between activities.
 
 - Have username and password sign in. 
