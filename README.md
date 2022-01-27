@@ -6,7 +6,7 @@ This app then evolved into a project that I have just been working on for fun so
 
 [Here's a link to a video demostrating the current functionality for january 2022](https://www.youtube.com/watch?v=TPls3t7gjEQ)
 
-If you want to add anything to it or help work on it or have any questions feel free to submit a PR or call or text me at (317)-201-1994
+If you want to add anything to it or help work on it or have any questions feel free to submit a PR or call or text me at (317)-201-1994. Or if you see a but feel free to open an issue.
 
 ***Im also always open to work on cool open source projects***
 
