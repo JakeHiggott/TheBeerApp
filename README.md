@@ -1,7 +1,14 @@
 # TheBeerApp
+
 This is a final project for my Mobile devices course created by me in december 2021. I submitted the initial prototype for the application as my final project and recieved a 100%.
 
+This app then evolved into a project that I have just been working on for fun someday I might publish it to the appstore. 
 
+[Here's a link to a video demostrating the current functionality for january 2022](https://www.youtube.com/watch?v=TPls3t7gjEQ)
+
+If you want to add anything to it or help work on it or have any questions feel free to submit a PR or call or text me at (317)-201-1994
+
+***Im also always open to work on cool open source projects***
 
 Current functionality:
 - Hits the openBreweryDB api and loads the results into a recycler view. 
